@@ -292,6 +292,9 @@ func (r *Router) Lookup(method, path string) (Handle, Params, bool) {
 	}
 	return nil, nil, false
 }
+func (r *Router) NewGroup(path string) *RouteGroup {
+	return newRouteGroup(r, path)
+}
 
 func (r *Router) allowed(path, reqMethod string) (allow string) {
 	if path == "*" { // server-wide
