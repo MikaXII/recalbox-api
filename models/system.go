@@ -24,13 +24,13 @@ type RomHash struct {
 type RomHashes []RomHash
 
 func ApiSystem(r *httprouter.Router) {
-	group("/v1", r)
+	groupV1(r)
 }
 
-func group(version string, r *httprouter.Router) {
-	r.GET(version + "/systems", getSystemList)
-	r.GET(version + "/systems/:id/roms", getRomsBySytem)
-	r.GET(version + "/systems/:id/hash", getRomsHash)
+func groupV1(r *httprouter.Router) {
+	r.GET("/v1/systems", getSystemList)
+	r.GET("/v1/systems/:id/roms", getRomsBySytem)
+	r.GET("/v1/systems/:id/hash", getRomsHash)
 }
 
 func response(w http.ResponseWriter, data []byte) {
