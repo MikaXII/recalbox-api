@@ -19,7 +19,8 @@ func main() {
 
 
 func loadEndpoints(r *httprouter.Router){
-	recalroutes.ApiSystem(r)
+	apiV1 := r.NewGroup("/v1")
+	recalroutes.SystemGroupV1(apiV1)
 }
 
 

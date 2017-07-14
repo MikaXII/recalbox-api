@@ -9,6 +9,7 @@ import (
 )
 
 const ROM_DIR = "/recalbox/share/roms/"
+const BASE_PATH = "/systems"
 
 type systemName struct {
 	Name string
@@ -23,14 +24,10 @@ type RomHash struct {
 
 type RomHashes []RomHash
 
-func ApiSystem(r *httprouter.Router) {
-	groupV1(r)
-}
-
-func groupV1(r *httprouter.Router) {
-	r.GET("/v1/systems", getSystemList)
-	r.GET("/v1/systems/:id/roms", getRomsBySytem)
-	r.GET("/v1/systems/:id/hash", getRomsHash)
+func SystemGroupV1(r *httprouter.RouteGroup) {
+	r.GET(BASE_PATH, getSystemList)
+	r.GET(BASE_PATH +"/:id/roms", getRomsBySytem)
+	r.GET(BASE_PATH +"/:id/hash", getRomsHash)
 }
 
 func response(w http.ResponseWriter, data []byte) {
