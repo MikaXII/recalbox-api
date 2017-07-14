@@ -1,17 +1,25 @@
 package main
 
 import (
+	"gitlab.com/MikaXII/recalbox-api/httprouter"
 	"net/http"
-	"gitlab.com/MikaXII/recalbox-api/router"
+	"log"
+	"gitlab.com/MikaXII/recalbox-api/models"
 )
 
 func main() {
-	mux := http.NewServeMux();
-	//mux.Handle("/api/", apiHandler{})
 
-	router.LoadAllEndpoint(mux)
+	router := httprouter.New();
 
-	http.ListenAndServe(":8080", mux);
+	loadEndpoints(router)
+
+
+	log.Fatal(http.ListenAndServe(":8080", router))
+}
+
+
+func loadEndpoints(r *httprouter.Router){
+	recalroutes.ApiSystem(r)
 }
 
 
