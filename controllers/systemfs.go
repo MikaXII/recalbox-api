@@ -6,10 +6,12 @@ import (
 	"encoding/json"
 	"gitlab.com/MikaXII/recalbox-api/httprouter"
 	"gitlab.com/MikaXII/recalbox-api/utils"
+	"path/filepath"
 )
 
 const ROM_DIR = "/recalbox/share/roms/"
 const BASE_PATH = "/systems"
+const GAMEL = "/gamelist.txt"
 
 type systemName struct {
 	Name string
@@ -26,8 +28,9 @@ type RomHashes []RomHash
 
 func SystemGroupV1(r *httprouter.RouteGroup) {
 	r.GET(BASE_PATH, getSystemList)
-	r.GET(BASE_PATH +"/:id/roms", getRomsBySytem)
-	r.GET(BASE_PATH +"/:id/hash", getRomsHash)
+	r.GET(BASE_PATH + "/:id/roms", getRomsBySytem)
+	r.GET(BASE_PATH + "/:id/hash", getRomsHashBySystem)
+	r.GET(BASE_PATH + "/:id/gamelist",getGamelist)
 }
 
 func response(w http.ResponseWriter, data []byte) {
@@ -37,19 +40,18 @@ func response(w http.ResponseWriter, data []byte) {
 
 func getSystemList(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 
-			listFiles := []systemName{}
-			files, _ := ioutil.ReadDir(ROM_DIR);
-			for _, f := range files {
-				listFiles = append(listFiles, systemName{Name:f.Name()})
-			}
-
-			jsonFiles, _ := json.Marshal(listFiles)
-
-			response(w,[]byte(jsonFiles))
+	listFiles := []systemName{}
+	files, _ := ioutil.ReadDir(ROM_DIR);
+	for _, f := range files {
+		if f.IsDir() {
+			listFiles = append(listFiles, systemName{Name: f.Name()})
+		}
+	}
+	jsonFiles, _ := json.Marshal(listFiles)
+	response(w, []byte(jsonFiles))
 }
 
 func getRomsBySytem(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-
 	listFiles := []systemName{}
 	systemId := ps.ByName("id")
 	files, _ := ioutil.ReadDir(ROM_DIR + systemId );
@@ -60,8 +62,7 @@ func getRomsBySytem(w http.ResponseWriter, r *http.Request, ps httprouter.Params
 	response(w,[]byte(jsonFiles))
 }
 
-func getRomsHash(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-
+func getRomsHashBySystem(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	systemId := ps.ByName("id")
 	files, _ := ioutil.ReadDir(ROM_DIR + systemId );
 	romH := RomHashes{}
@@ -78,3 +79,8 @@ func getRomsHash(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	response(w,[]byte(jsonFiles))
 }
 
+func getGamelist(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	systemId := ps.ByName("id")
+	gamelist, _ := ioutil.ReadFile(ROM_DIR + "/" + systemId + GAMEL)
+	response(w, gamelist)
+}

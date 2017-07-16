@@ -4,16 +4,13 @@ import (
 	"gitlab.com/MikaXII/recalbox-api/httprouter"
 	"net/http"
 	"log"
-	"gitlab.com/MikaXII/recalbox-api/models"
+	"gitlab.com/MikaXII/recalbox-api/controllers"
 )
 
 func main() {
 
-	router := httprouter.New();
-
+	router := httprouter.New()
 	loadEndpoints(router)
-
-
 	log.Fatal(http.ListenAndServe(":8080", router))
 }
 
