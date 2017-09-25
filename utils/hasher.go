@@ -1,20 +1,20 @@
 package utils
 
 import (
-	"os"
+	"crypto/md5"
+	"crypto/sha1"
+	"encoding/hex"
 	"fmt"
 	"hash/crc32"
 	"io"
-	"encoding/hex"
-	"crypto/md5"
-	"crypto/sha1"
+	"os"
 )
 
-func CRC32ToString (fileDir string) string {
+func CRC32ToString(fileDir string) string {
 
 	file, err := os.Open(fileDir)
 	if err != nil {
-		fmt.Println(err);
+		fmt.Println(err)
 		return ""
 	}
 	defer file.Close()
@@ -29,11 +29,11 @@ func CRC32ToString (fileDir string) string {
 	return crcString
 }
 
-func MD5ToString (fileDir string) string  {
+func MD5ToString(fileDir string) string {
 
 	file, err := os.Open(fileDir)
 	if err != nil {
-		fmt.Println(err);
+		fmt.Println(err)
 		return ""
 	}
 	hashMD5 := md5.New()
@@ -47,11 +47,11 @@ func MD5ToString (fileDir string) string  {
 	return md5String
 }
 
-func SHA1ToString (fileDir string) string {
+func SHA1ToString(fileDir string) string {
 
 	file, err := os.Open(fileDir)
 	if err != nil {
-		fmt.Println(err);
+		fmt.Println(err)
 		return ""
 	}
 
@@ -61,6 +61,5 @@ func SHA1ToString (fileDir string) string {
 	}
 	hashInBytes := hashSHA1.Sum(nil)
 	sha1String := hex.EncodeToString(hashInBytes)
-
 	return sha1String
 }

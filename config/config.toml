@@ -1,0 +1,9 @@
+version= "0.0.1"
+
+[fs]
+romPath= "/Users/mikaxii/Documents/recalbox/share/roms/"
+gamelist= "/gamelist.txt"
+
+[listEndpoint]
+romEndpoint= "/roms"
+
