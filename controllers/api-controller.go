@@ -6,7 +6,11 @@ import (
 
 func ApiInfo(r *gin.Engine, version string) {
 	r.GET("/", func(c *gin.Context) {
-		c.JSON(200, gin.H{"version": version})
+		var listRoutes []string
+		for _, route := range r.Routes() {
+			listRoutes = append(listRoutes, route.Path)
+		}
+		c.JSON(200, gin.H{"version": version, "listAvailableEndpoint": listRoutes})
 	})
 
 }

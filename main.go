@@ -11,6 +11,7 @@ func main() {
 
 	router := gin.Default()
 	loadEndpoints(router)
+
 	router.Run()
 }
 
@@ -23,6 +24,7 @@ func loadEndpoints(r *gin.Engine) {
 	rangeV2, _ := semver.ParseRange(">=2.0.0 <3.0.0")
 
 	controllers.ApiInfo(r, config.Version)
+
 	if rangeV1(version) {
 		v1 := r.Group("/v1")
 		{
