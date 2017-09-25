@@ -1,4 +1,4 @@
-package recalroutes
+package controllers
 
 import (
 	"fmt"
@@ -13,8 +13,8 @@ import (
 )
 
 // const ROM_DIR = "/recalbox/share/roms/"
-var romEndpoint string
-var romPath string
+var systemsEndpoint string
+var systemsPath string
 var gamelistPath string
 
 type systemName struct {
@@ -31,19 +31,19 @@ type RomHash struct {
 type RomHashes []RomHash
 
 func RomGroupV1(r *gin.RouterGroup, config *configuration.Configuration) {
-	romEndpoint = config.ListEndpoint.RomEndpoint
-	romPath = config.Fs.RomPath
-	r.GET(romEndpoint, getSystemList)
-	r.GET(romEndpoint+"/:systemId/", getRomsBySytem)
-	r.GET(romEndpoint+"/:systemId/hash", getRomsHashBySystem)
-	r.GET(romEndpoint+"/:systemId/gamelist", getGamelist)
+	systemsEndpoint = config.ListEndpoint.SystemsEndpoint
+	systemsPath = config.Fs.SystemsPath
+	r.GET(systemsEndpoint, getSystemList)
+	r.GET(systemsEndpoint+"/:systemId/", getRomsBySytem)
+	r.GET(systemsEndpoint+"/:systemId/hash", getRomsHashBySystem)
+	r.GET(systemsEndpoint+"/:systemId/gamelist", getGamelist)
 
-	r.POST(romEndpoint+"/:systemId", uploadRoms)
+	r.POST(systemsEndpoint+"/:systemId", uploadRoms)
 }
 
 func getSystemList(c *gin.Context) {
 	listFiles := []systemName{}
-	files, _ := ioutil.ReadDir(romPath)
+	files, _ := ioutil.ReadDir(systemsPath)
 	for _, f := range files {
 		if f.IsDir() {
 			listFiles = append(listFiles, systemName{Name: f.Name()})
@@ -55,7 +55,7 @@ func getSystemList(c *gin.Context) {
 func getRomsBySytem(c *gin.Context) {
 	listFiles := []systemName{}
 	systemID := c.Param("systemId")
-	files, _ := ioutil.ReadDir(romPath + systemID)
+	files, _ := ioutil.ReadDir(systemsPath + systemID)
 	for _, f := range files {
 		listFiles = append(listFiles, systemName{Name: f.Name()})
 	}
@@ -64,10 +64,10 @@ func getRomsBySytem(c *gin.Context) {
 
 func getRomsHashBySystem(c *gin.Context) {
 	systemID := c.Param("systemId")
-	files, _ := ioutil.ReadDir(romPath + systemID)
+	files, _ := ioutil.ReadDir(systemsPath + systemID)
 	romH := RomHashes{}
 	for _, f := range files {
-		filePath := romPath + systemID + "/" + f.Name()
+		filePath := systemsPath + systemID + "/" + f.Name()
 		rom := RomHash{Name: f.Name(),
 			Crc:  utils.CRC32ToString(filePath),
 			Md5:  utils.MD5ToString(filePath),
@@ -79,7 +79,7 @@ func getRomsHashBySystem(c *gin.Context) {
 
 func getGamelist(c *gin.Context) {
 	systemID := c.Param("systemId")
-	gamelist, _ := ioutil.ReadFile(romPath + "/" + systemID + gamelistPath)
+	gamelist, _ := ioutil.ReadFile(systemsPath + "/" + systemID + gamelistPath)
 	c.JSON(http.StatusOK, gamelist)
 }
 
@@ -94,8 +94,8 @@ func uploadRoms(c *gin.Context) {
 
 		src, _ := file.Open()
 		defer src.Close()
-		println(romPath + systemID + "/" + file.Filename)
-		dst, _ := os.Create(romPath + systemID + "/" + file.Filename)
+		println(systemsPath + systemID + "/" + file.Filename)
+		dst, _ := os.Create(systemsPath + systemID + "/" + file.Filename)
 		defer dst.Close()
 
 		io.Copy(dst, src)

@@ -1,4 +1,4 @@
-package recalroutes
+package controllers
 
 import (
 	"github.com/gin-gonic/gin"

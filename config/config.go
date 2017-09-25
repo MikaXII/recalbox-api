@@ -14,12 +14,12 @@ type Configuration struct {
 }
 
 type FileSystemInfo struct {
-	RomPath  string
-	Gamelist string
+	SystemsPath string
+	Gamelist    string
 }
 
 type Endpoint struct {
-	RomEndpoint string
+	SystemsEndpoint string
 }
 
 func LoadConfig(mode string) *Configuration {
