@@ -10,16 +10,17 @@ type Configuration struct {
 	Version      string
 	Fs           FileSystemInfo
 	ListEndpoint Endpoint
-	// Recalbox 	RecalboxConf
 }
 
 type FileSystemInfo struct {
 	SystemsPath string
+	BiosPath    string
 	Gamelist    string
 }
 
 type Endpoint struct {
 	SystemsEndpoint string
+	BiosEndpoint    string
 }
 
 func LoadConfig(mode string) *Configuration {

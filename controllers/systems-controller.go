@@ -9,26 +9,12 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"gitlab.com/MikaXII/recalbox-api/config"
-	"gitlab.com/MikaXII/recalbox-api/utils"
+	"gitlab.com/MikaXII/recalbox-api/models"
 )
 
-// const ROM_DIR = "/recalbox/share/roms/"
 var systemsEndpoint string
 var systemsPath string
 var gamelistPath string
-
-type systemName struct {
-	Name string
-}
-
-type RomHash struct {
-	Name string
-	Crc  string
-	Md5  string
-	Sha1 string
-}
-
-type RomHashes []RomHash
 
 func RomGroupV1(r *gin.RouterGroup, config *configuration.Configuration) {
 	systemsEndpoint = config.ListEndpoint.SystemsEndpoint
@@ -42,39 +28,38 @@ func RomGroupV1(r *gin.RouterGroup, config *configuration.Configuration) {
 }
 
 func getSystemList(c *gin.Context) {
-	listFiles := []systemName{}
+	listFiles := []models.System{}
 	files, _ := ioutil.ReadDir(systemsPath)
 	for _, f := range files {
 		if f.IsDir() {
-			listFiles = append(listFiles, systemName{Name: f.Name()})
+			listFiles = append(listFiles, models.System{Name: f.Name()})
 		}
 	}
 	c.JSON(http.StatusOK, listFiles)
 }
 
 func getRomsBySytem(c *gin.Context) {
-	listFiles := []systemName{}
+	listFiles := []models.System{}
 	systemID := c.Param("systemId")
 	files, _ := ioutil.ReadDir(systemsPath + systemID)
 	for _, f := range files {
-		listFiles = append(listFiles, systemName{Name: f.Name()})
+		listFiles = append(listFiles, models.System{Name: f.Name()})
 	}
 	c.JSON(http.StatusOK, listFiles)
 }
 
 func getRomsHashBySystem(c *gin.Context) {
+	supportedHash := models.SupportedHash()
 	systemID := c.Param("systemId")
 	files, _ := ioutil.ReadDir(systemsPath + systemID)
-	romH := RomHashes{}
+	romInfo := []models.RomInfo{}
+
 	for _, f := range files {
 		filePath := systemsPath + systemID + "/" + f.Name()
-		rom := RomHash{Name: f.Name(),
-			Crc:  utils.CRC32ToString(filePath),
-			Md5:  utils.MD5ToString(filePath),
-			Sha1: utils.SHA1ToString(filePath)}
-		romH = append(romH, rom)
+		rom := models.NewRom(filePath, f, supportedHash)
+		romInfo = append(romInfo, *rom.Info())
 	}
-	c.JSON(http.StatusOK, romH)
+	c.JSON(http.StatusOK, romInfo)
 }
 
 func getGamelist(c *gin.Context) {
@@ -90,8 +75,6 @@ func uploadRoms(c *gin.Context) {
 	systemID := c.Param("systemId")
 
 	for _, file := range files {
-		//		log.Println(file.Filename)
-
 		src, _ := file.Open()
 		defer src.Close()
 		println(systemsPath + systemID + "/" + file.Filename)

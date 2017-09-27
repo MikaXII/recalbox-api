@@ -63,3 +63,54 @@ func SHA1ToString(fileDir string) string {
 	sha1String := hex.EncodeToString(hashInBytes)
 	return sha1String
 }
+
+func CRC32(fileDir string) ([]byte, string) {
+
+	file, err := os.Open(fileDir)
+	if err != nil {
+		return nil, ""
+	}
+	defer file.Close()
+
+	hashCRC := crc32.NewIEEE()
+	if _, err := io.Copy(hashCRC, file); err != nil {
+		return nil, ""
+	}
+	hashInBytes := hashCRC.Sum(nil)
+	crcString := hex.EncodeToString(hashInBytes)
+
+	return hashInBytes, crcString
+}
+
+func MD5(fileDir string) ([]byte, string) {
+	file, err := os.Open(fileDir)
+	if err != nil {
+		fmt.Println(err)
+		return nil, ""
+	}
+	hashMD5 := md5.New()
+	if _, err := io.Copy(hashMD5, file); err != nil {
+		return nil, ""
+	}
+
+	hashInBytes := hashMD5.Sum(nil)
+	md5String := hex.EncodeToString(hashInBytes)
+	return hashInBytes, md5String
+}
+
+func SHA1(fileDir string) ([]byte, string) {
+
+	file, err := os.Open(fileDir)
+	if err != nil {
+		fmt.Println(err)
+		return nil, ""
+	}
+
+	hashSHA1 := sha1.New()
+	if _, err := io.Copy(hashSHA1, file); err != nil {
+		return nil, ""
+	}
+	hashInBytes := hashSHA1.Sum(nil)
+	sha1String := hex.EncodeToString(hashInBytes)
+	return hashInBytes, sha1String
+}

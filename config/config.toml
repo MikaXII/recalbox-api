@@ -1,9 +1,10 @@
 version= "0.0.1"
 
 [fs]
-systemsPath= "/Users/mikaxii/Documents/recalbox/share/roms/"
+systemsPath= "/recalbox/share/roms/"
+biosPath= "/recalbox/share/bios/"
 gamelist= "/gamelist.txt"
 
 [listEndpoint]
 systemsEndpoint= "/systems"
-
+biosEndpoint= "/bios"
