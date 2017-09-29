@@ -19,9 +19,9 @@ go run main.go #or go build
 ### With docker (WIP)
 ```
 docker build -t recalbox-api .
-docker run -it --rm -p 8080:8080 -v </recalbox-folder>:/recalbox recalbox-api
+docker run -it --rm -p 8080:8080 -v </recalbox-folder>:/recalbox/share recalbox-api
 ```
-</recalbox-folder>: /recalbox/share on your filesytem
+
 
 | Method | Endpoint                   | Result                                     |
 |--------|----------------------------|--------------------------------------------|
