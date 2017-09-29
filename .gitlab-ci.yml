@@ -6,7 +6,7 @@ before_script:
   - go get github.com/kardianos/govendor
   - mkdir -p /go/src/gitlab.com/MikaXII/
   - cp -r /builds/MikaXII /go/src/gitlab.com/MikaXII/
-  - cd /go/src//gitlab.com/MikaXII/recalbox-api
+  - cd /go/src/gitlab.com/MikaXII/recalbox-api
 
 build-my-project:
   stage: build
