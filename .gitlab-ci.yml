@@ -5,7 +5,7 @@ stages:
 before_script:
   - go get github.com/kardianos/govendor
   - ln -s /builds /go/src/gitlab.com
-  - cd /builds/MikaXII/recalbox-api
+  - cd /go/src/gitlab.com/MikaXII/recalbox-api
 
 build-my-project:
   stage: build
