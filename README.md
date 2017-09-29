@@ -22,6 +22,7 @@ docker build -t recalbox-api .
 docker run -it --rm -p 8080:8080 -v </recalbox-folder>:/recalbox/share recalbox-api
 ```
 
+recalbox-folder = same skeleton as /recalbox/share on your fs
 
 | Method | Endpoint                   | Result                                     |
 |--------|----------------------------|--------------------------------------------|
