@@ -7,8 +7,9 @@ before_script:
   - ln -s /builds /go/src/gitlab.com
   - cd /go/src/gitlab.com/MikaXII/recalbox-api
 
-build-my-project:
+build-api:
   stage: build
+  when: manual
   script:
     - govendor sync
     - go build
