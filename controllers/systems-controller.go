@@ -19,6 +19,7 @@ var gamelistPath string
 func RomGroupV1(r *gin.RouterGroup, config *configuration.Configuration) {
 	systemsEndpoint = config.ListEndpoint.SystemsEndpoint
 	systemsPath = config.Fs.SystemsPath
+
 	r.GET(systemsEndpoint, getSystemList)
 	r.GET(systemsEndpoint+"/:systemId/", getRomsBySytem)
 	r.GET(systemsEndpoint+"/:systemId/hash", getRomsHashBySystem)

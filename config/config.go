@@ -3,7 +3,7 @@ package configuration
 import (
 	"fmt"
 
-	"gopkg.in/BurntSushi/toml.v0"
+	"github.com/BurntSushi/toml"
 )
 
 type Configuration struct {
@@ -34,8 +34,10 @@ func LoadConfig(mode string) *Configuration {
 
 	config := Configuration{}
 	_, err := toml.DecodeFile(path, &config)
+
 	if err != nil {
 		fmt.Println("error:", err)
 	}
 	return &config
+
 }

@@ -10,7 +10,7 @@ type Hash struct {
 	byteValue   []byte
 }
 
-func NewHash(filePath string, hashType string) Hash {
+func NewHash(filePath string, hashType string) *Hash {
 	bytes := []byte{}
 	value := ""
 	switch hashType {
@@ -24,8 +24,7 @@ func NewHash(filePath string, hashType string) Hash {
 		bytes, value = utils.CRC32(filePath)
 		break
 	}
-	//	bytes, value := utils.CRC32(filePath)
-	return Hash{byteValue: bytes, StringValue: value, HashType: hashType}
+	return &Hash{byteValue: bytes, StringValue: value, HashType: hashType}
 }
 
 func SupportedHash() []string {

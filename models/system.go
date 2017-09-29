@@ -19,7 +19,7 @@ type RomInfo struct {
 func NewRom(filepath string, file os.FileInfo, hash []string) *Rom {
 	hashList := []Hash{}
 	for _, h := range hash {
-		hashList = append(hashList, NewHash(filepath, h))
+		hashList = append(hashList, *NewHash(filepath, h))
 	}
 	return &Rom{name: file.Name(), hashList: hashList}
 }
