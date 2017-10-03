@@ -3,7 +3,7 @@ stages:
   - build
 
 before_script:
-  - go get github.com/kardianos/govendor
+  - go get github.com/tools/godep
   - ln -s /builds /go/src/gitlab.com
   - cd /go/src/gitlab.com/MikaXII/recalbox-api
 
@@ -11,5 +11,5 @@ build-api:
   stage: build
   when: manual
   script:
-    - govendor sync
+    - godep restore
     - go build
