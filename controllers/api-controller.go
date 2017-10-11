@@ -4,7 +4,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func ApiInfo(r *gin.Engine, version string) {
+// APIInfo set root endpoint with all info
+func APIInfo(r *gin.Engine, version string) {
 	r.GET("/", func(c *gin.Context) {
 		var listRoutes []string
 		for _, route := range r.Routes() {

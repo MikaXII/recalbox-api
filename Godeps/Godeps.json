@@ -2,9 +2,6 @@
 	"ImportPath": "gitlab.com/MikaXII/recalbox-api",
 	"GoVersion": "go1.9",
 	"GodepVersion": "v79",
-	"Packages": [
-		"./"
-	],
 	"Deps": [
 		{
 			"ImportPath": "github.com/BurntSushi/toml",

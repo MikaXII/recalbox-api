@@ -13,11 +13,13 @@ import (
 var biosEndpoint string
 var biosPath string
 
+// Bios represents a bios file
 type Bios struct {
 	Name string
 	Hash string
 }
 
+// BiosGroupV1 regroup path for v1 endpoint
 func BiosGroupV1(r *gin.RouterGroup, config *configuration.Configuration) {
 	biosEndpoint = config.ListEndpoint.BiosEndpoint
 	biosPath = config.Fs.BiosPath
@@ -25,6 +27,7 @@ func BiosGroupV1(r *gin.RouterGroup, config *configuration.Configuration) {
 
 }
 
+// getListBios -> get Bios list...
 func getListBios(c *gin.Context) {
 	listFiles := []Bios{}
 	files, _ := ioutil.ReadDir(biosPath)

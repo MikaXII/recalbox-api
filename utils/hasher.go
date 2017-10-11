@@ -7,9 +7,11 @@ import (
 	"fmt"
 	"hash/crc32"
 	"io"
+	"log"
 	"os"
 )
 
+// CRC32ToString get CRC32 string of a file
 func CRC32ToString(fileDir string) string {
 
 	file, err := os.Open(fileDir)
@@ -17,7 +19,12 @@ func CRC32ToString(fileDir string) string {
 		fmt.Println(err)
 		return ""
 	}
-	defer file.Close()
+	defer func() {
+		err := file.Close()
+		if err != nil {
+			log.Fatal(err)
+		}
+	}()
 
 	hashCRC := crc32.NewIEEE()
 	if _, err := io.Copy(hashCRC, file); err != nil {
@@ -29,6 +36,7 @@ func CRC32ToString(fileDir string) string {
 	return crcString
 }
 
+// MD5ToString get MD5 string of a file
 func MD5ToString(fileDir string) string {
 
 	file, err := os.Open(fileDir)
@@ -47,6 +55,7 @@ func MD5ToString(fileDir string) string {
 	return md5String
 }
 
+// SHA1ToString get SHA1 string of a file
 func SHA1ToString(fileDir string) string {
 
 	file, err := os.Open(fileDir)
@@ -64,13 +73,19 @@ func SHA1ToString(fileDir string) string {
 	return sha1String
 }
 
+// CRC32 get CRC32 hash of a file
 func CRC32(fileDir string) ([]byte, string) {
 
 	file, err := os.Open(fileDir)
 	if err != nil {
 		return nil, ""
 	}
-	defer file.Close()
+	defer func() {
+		err := file.Close()
+		if err != nil {
+			log.Fatal(err)
+		}
+	}()
 
 	hashCRC := crc32.NewIEEE()
 	if _, err := io.Copy(hashCRC, file); err != nil {
@@ -82,6 +97,7 @@ func CRC32(fileDir string) ([]byte, string) {
 	return hashInBytes, crcString
 }
 
+// MD5 get MD5 hash of a file
 func MD5(fileDir string) ([]byte, string) {
 	file, err := os.Open(fileDir)
 	if err != nil {
@@ -98,6 +114,7 @@ func MD5(fileDir string) ([]byte, string) {
 	return hashInBytes, md5String
 }
 
+// SHA1 get SHA1 hash of a file
 func SHA1(fileDir string) ([]byte, string) {
 
 	file, err := os.Open(fileDir)
