@@ -3,6 +3,9 @@ stages:
   - lint
   - build
 
+variables:
+  CGO_ENABLED: 0 # https://github.com/alecthomas/gometalinter/issues/149
+
 before_script:
   - go get github.com/tools/godep
   - go get -u github.com/alecthomas/gometalinter
@@ -15,7 +18,7 @@ golinter:
   script:
     - cd $GOPATH/src/gitlab.com/MikaXII/recalbox-api
     - godep restore
-    - gometalinter -t --deadline=900s -j1 --aggregate ./...
+    - gometalinter --aggregate ./... --disable gotype 
 
 build-api:
   stage: build
