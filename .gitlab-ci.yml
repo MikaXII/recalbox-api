@@ -1,11 +1,20 @@
 image: golang:1.7
 stages:
+  - lint
   - build
 
 before_script:
   - go get github.com/tools/godep
+  - go get -u github.com/alecthomas/gometalinter
+  - gometalinter --install
   - ln -s /builds /go/src/gitlab.com
   - cd /go/src/gitlab.com/MikaXII/recalbox-api
+
+golinter:
+  stage: lint
+  when: manual
+  script:
+    - gometalinter -t --deadline=900s -j1 --aggregate ./...
 
 build-api:
   stage: build
