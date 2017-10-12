@@ -9,6 +9,7 @@ before_script:
   - gometalinter --install
   - ln -s /builds /go/src/gitlab.com
   - cd /go/src/gitlab.com/MikaXII/recalbox-api
+  - godep restore
 
 golinter:
   stage: lint
@@ -20,5 +21,4 @@ build-api:
   stage: build
   when: manual
   script:
-    - godep restore
     - go build
