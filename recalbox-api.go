@@ -10,15 +10,21 @@ import (
 
 func main() {
 
-	router := gin.Default()
-	loadEndpoints(router)
-
-	err := router.Run()
+	err := GetMainEngine().Run()
 	if err != nil {
 		log.Fatal(err)
 	}
 }
 
+// GetMainEngine get the main engine ?
+func GetMainEngine() *gin.Engine {
+	router := gin.Default()
+	loadEndpoints(router)
+
+	return router
+}
+
+// loadEndpoints load all endpoints
 func loadEndpoints(r *gin.Engine) {
 
 	config := configuration.LoadConfig(gin.Mode())

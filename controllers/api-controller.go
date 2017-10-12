@@ -13,5 +13,4 @@ func APIInfo(r *gin.Engine, version string) {
 		}
 		c.JSON(200, gin.H{"version": version, "listAvailableEndpoint": listRoutes})
 	})
-
 }

@@ -1,6 +1,6 @@
 image: golang:1.7
 stages:
-  - lint
+  - test
   - build
 
 variables:
@@ -8,17 +8,18 @@ variables:
 
 before_script:
   - go get github.com/tools/godep
-  - go get -u github.com/alecthomas/gometalinter
-  - gometalinter --install
   - ln -s /builds $GOPATH/src/gitlab.com
+  - cd $GOPATH/src/gitlab.com/MikaXII/recalbox-api
+  - godep restore
 
-golinter:
-  stage: lint
+test-lint:
+  stage: test
   when: manual
   script:
-    - cd $GOPATH/src/gitlab.com/MikaXII/recalbox-api
-    - godep restore
+    - go get -u github.com/alecthomas/gometalinter
+    - gometalinter --install
     - gometalinter --aggregate ./... --disable gotype 
+    - go test
 
 build-api:
   stage: build
