@@ -7,14 +7,14 @@ before_script:
   - go get github.com/tools/godep
   - go get -u github.com/alecthomas/gometalinter
   - gometalinter --install
-  - ln -s /builds /go/src/gitlab.com
-  - cd /go/src/gitlab.com/MikaXII/recalbox-api
-  - godep restore
+  - ln -s /builds $GOPATH/src/gitlab.com
 
 golinter:
   stage: lint
   when: manual
   script:
+    - cd $GOPATH/src/gitlab.com/MikaXII/recalbox-api
+    - godep restore
     - gometalinter -t --deadline=900s -j1 --aggregate ./...
 
 build-api:
