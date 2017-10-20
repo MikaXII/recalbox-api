@@ -6,37 +6,29 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"gitlab.com/MikaXII/recalbox-api/config"
-	"gitlab.com/MikaXII/recalbox-api/utils"
+	"gitlab.com/MikaXII/recalbox-api/models"
 )
 
 // const ROM_DIR = "/recalbox/share/roms/"
 var biosEndpoint string
 var biosPath string
 
-// Bios represents a bios file
-type Bios struct {
-	Name string
-	Hash string
-}
-
 // BiosGroupV1 regroup path for v1 endpoint
 func BiosGroupV1(r *gin.RouterGroup, config *configuration.Configuration) {
 	biosEndpoint = config.ListEndpoint.BiosEndpoint
 	biosPath = config.Fs.BiosPath
 	r.GET(biosEndpoint, getListBios)
-
 }
 
 // getListBios -> get Bios list...
 func getListBios(c *gin.Context) {
-	listFiles := []Bios{}
+	listFiles := []models.Media{}
 	files, _ := ioutil.ReadDir(biosPath)
-
 	for _, f := range files {
 		filePath := biosPath + "/" + f.Name()
 		if f.IsDir() {
 		} else {
-			listFiles = append(listFiles, Bios{Name: f.Name(), Hash: utils.MD5ToString(filePath)})
+			listFiles = append(listFiles, *models.NewMedia(filePath, f))
 		}
 	}
 	c.JSON(http.StatusOK, listFiles)

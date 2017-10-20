@@ -1,6 +1,14 @@
 package models
 
-import "os"
+import (
+	"crypto/md5"
+	"crypto/sha1"
+	"encoding/hex"
+	"fmt"
+	"hash/crc32"
+	"io"
+	"os"
+)
 
 // System represent a system...
 type System struct {
@@ -8,47 +16,68 @@ type System struct {
 }
 
 // Rom represents a rom file
-type Rom struct {
-	name     string
-	hashList []Hash
+type Media struct {
+	Name     string
+	Filepath string
+	HashList []Hash
 }
 
-// RomInfo represents a exported info of a rom file
-type RomInfo struct {
-	Name         string
-	HashListInfo []Hash
+type Hash struct {
+	HashType string
+	Value    string
 }
 
 // NewRom create a new rom with filepath, file and hash
-func NewRom(filepath string, file os.FileInfo, hash []string) *Rom {
-	hashList := []Hash{}
-	for _, h := range hash {
-		hashList = append(hashList, *NewHash(filepath, h))
+func NewMedia(filepath string, file os.FileInfo) *Media {
+	rom := &Media{Name: file.Name(), Filepath: filepath}
+	rom.SetHash()
+	return rom
+}
+
+func (r *Media) SetHash() {
+	r.HashList = append(r.HashList, Hash{HashType: "MD5", Value: r.MD5()})
+	r.HashList = append(r.HashList, Hash{HashType: "SHA1", Value: r.SHA1()})
+	r.HashList = append(r.HashList, Hash{HashType: "CRC", Value: r.CRC()})
+}
+
+func (r *Media) MD5() string {
+	file, err := os.Open(r.Filepath)
+	if err != nil {
+		fmt.Println(err)
+		return ""
 	}
-	return &Rom{name: file.Name(), hashList: hashList}
-}
-
-// Hash get specified hash for a rom file
-func (r *Rom) Hash(hashType string) *Hash {
-	for _, h := range r.hashList {
-		if h.HashType == hashType {
-			return &h
-		}
+	hashMD5 := md5.New()
+	if _, err := io.Copy(hashMD5, file); err != nil {
+		return ""
 	}
-	return &Hash{}
+	return hex.EncodeToString(hashMD5.Sum(nil))
 }
 
-// HashList get list of hash for a rom file
-func (r *Rom) HashList() []Hash {
-	return r.hashList
+func (r *Media) SHA1() string {
+	file, err := os.Open(r.Filepath)
+	if err != nil {
+		fmt.Println(err)
+		return ""
+	}
+	hashSHA1 := sha1.New()
+	if _, err := io.Copy(hashSHA1, file); err != nil {
+		return ""
+	}
+	return hex.EncodeToString(hashSHA1.Sum(nil))
 }
 
-// Name get name of a rom file
-func (r *Rom) Name() string {
-	return r.name
-}
+func (r *Media) CRC() string {
+	file, err := os.Open(r.Filepath)
+	if err != nil {
+		fmt.Println(err)
+		return ""
+	}
 
-// Info get all info for a rom
-func (r *Rom) Info() *RomInfo {
-	return &RomInfo{Name: r.name, HashListInfo: r.HashList()}
+	hashCRC := crc32.NewIEEE()
+
+	if _, err := io.Copy(hashCRC, file); err != nil {
+		return ""
+	}
+
+	return hex.EncodeToString(hashCRC.Sum(nil))
 }

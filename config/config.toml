@@ -4,6 +4,7 @@ version= "0.0.1"
 systemsPath= "/recalbox/share/roms/"
 biosPath= "/recalbox/share/bios/"
 gamelist= "/gamelist.txt"
+recalboxConf = "/recalbox/share/system/recalbox.conf"
 
 [listEndpoint]
 systemsEndpoint= "/systems"

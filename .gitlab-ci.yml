@@ -5,6 +5,7 @@ stages:
 
 variables:
   CGO_ENABLED: 0 # https://github.com/alecthomas/gometalinter/issues/149
+  GIN_MODE: release
 
 before_script:
   - go get github.com/tools/godep

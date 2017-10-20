@@ -54,15 +54,14 @@ func getRomsBySytem(c *gin.Context) {
 
 // getRomsHashBySystem Get All rom's hash in a system folder
 func getRomsHashBySystem(c *gin.Context) {
-	supportedHash := models.SupportedHash()
 	systemID := c.Param("systemId")
 	files, _ := ioutil.ReadDir(systemsPath + systemID)
-	romInfo := []models.RomInfo{}
+	romInfo := []models.Media{}
 
 	for _, f := range files {
 		filePath := systemsPath + systemID + "/" + f.Name()
-		rom := models.NewRom(filePath, f, supportedHash)
-		romInfo = append(romInfo, *rom.Info())
+		rom := models.NewMedia(filePath, f)
+		romInfo = append(romInfo, *rom)
 	}
 	c.JSON(http.StatusOK, romInfo)
 }
