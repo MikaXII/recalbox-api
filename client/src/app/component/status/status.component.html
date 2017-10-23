@@ -1,0 +1,14 @@
+<mat-card *ngIf="status">
+  <mat-card-title>
+    Status
+  </mat-card-title>
+  <mat-card-subtitle>
+    Version : {{status.version}}
+  </mat-card-subtitle>
+  <mat-card-content>
+    Available endpoints : 
+    <mat-list>
+      <mat-list-item *ngFor="let endpoint of status.listAvailableEndpoint">{{endpoint}}</mat-list-item>
+    </mat-list>
+  </mat-card-content>
+</mat-card>

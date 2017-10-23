@@ -1,0 +1,6 @@
+mat-card {
+    margin-top: 10px;
+    width: 25vw;
+    height: 25Vh;
+    overflow: auto;
+}

@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"gitlab.com/MikaXII/recalbox-api/config"
 	"gitlab.com/MikaXII/recalbox-api/controllers"
@@ -26,7 +27,7 @@ func GetMainEngine() *gin.Engine {
 
 // loadEndpoints load all endpoints
 func loadEndpoints(r *gin.Engine) {
-
+	r.Use(cors.Default())
 	config := configuration.LoadConfig(gin.Mode())
 	authGuard := gin.Accounts{"foo": "bar"}
 	basicAuth := gin.BasicAuth(authGuard)
