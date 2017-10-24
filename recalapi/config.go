@@ -1,4 +1,4 @@
-package configuration
+package recalapi
 
 import (
 	"bytes"
@@ -45,7 +45,7 @@ func LoadConfig(mode string) *Configuration {
 	// In recalbox should be in /etc/recalbox-api/config.toml
 	path := "/etc/recalbox-api/config.toml"
 	if mode == "debug" {
-		path = "./config/config.toml"
+		path = "./recalapi/config.toml"
 	}
 
 	config := Configuration{}

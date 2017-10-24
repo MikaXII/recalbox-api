@@ -1,4 +1,4 @@
-package controllers
+package recalapi
 
 import (
 	"fmt"
@@ -9,8 +9,6 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
-	"gitlab.com/MikaXII/recalbox-api/config"
-	"gitlab.com/MikaXII/recalbox-api/models"
 )
 
 var systemsEndpoint string
@@ -18,7 +16,7 @@ var systemsPath string
 var gamelistPath string
 
 // RomGroupV1 Regroup path for v1 endpoint
-func RomGroupV1(r *gin.RouterGroup, config *configuration.Configuration) {
+func RomGroupV1(r *gin.RouterGroup, config *Configuration) {
 	systemsEndpoint = config.ListEndpoint.SystemsEndpoint
 	systemsPath = config.Fs.SystemsPath
 	r.GET(systemsEndpoint, getSystemList)
@@ -31,11 +29,11 @@ func RomGroupV1(r *gin.RouterGroup, config *configuration.Configuration) {
 
 // getSystemList Get system list
 func getSystemList(c *gin.Context) {
-	listFiles := []models.System{}
+	listFiles := []System{}
 	files, _ := ioutil.ReadDir(systemsPath)
 	for _, f := range files {
 		if f.IsDir() {
-			listFiles = append(listFiles, models.System{Name: f.Name()})
+			listFiles = append(listFiles, System{Name: f.Name()})
 		}
 	}
 	c.JSON(http.StatusOK, listFiles)
@@ -43,11 +41,11 @@ func getSystemList(c *gin.Context) {
 
 // getRomsBySytem Get all rom in a system folder
 func getRomsBySytem(c *gin.Context) {
-	listFiles := []models.System{}
+	listFiles := []System{}
 	systemID := c.Param("systemId")
 	files, _ := ioutil.ReadDir(systemsPath + systemID)
 	for _, f := range files {
-		listFiles = append(listFiles, models.System{Name: f.Name()})
+		listFiles = append(listFiles, System{Name: f.Name()})
 	}
 	c.JSON(http.StatusOK, listFiles)
 }
@@ -56,11 +54,11 @@ func getRomsBySytem(c *gin.Context) {
 func getRomsHashBySystem(c *gin.Context) {
 	systemID := c.Param("systemId")
 	files, _ := ioutil.ReadDir(systemsPath + systemID)
-	romInfo := []models.Media{}
+	romInfo := []Media{}
 
 	for _, f := range files {
 		filePath := systemsPath + systemID + "/" + f.Name()
-		rom := models.NewMedia(filePath, f)
+		rom := NewMedia(filePath, f)
 		romInfo = append(romInfo, *rom)
 	}
 	c.JSON(http.StatusOK, romInfo)

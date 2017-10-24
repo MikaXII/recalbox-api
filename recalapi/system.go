@@ -1,4 +1,4 @@
-package models
+package recalapi
 
 import (
 	"crypto/md5"

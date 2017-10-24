@@ -1,4 +1,4 @@
-package controllers
+package recalapi
 
 import (
 	"github.com/gin-contrib/static"
